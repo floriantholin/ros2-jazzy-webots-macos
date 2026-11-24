@@ -70,3 +70,14 @@ brew upgrade ros2-jazzy
 ./fix_ros2_macos.sh ~/ros2_ws
 ```
 *(Ajoutez `--rebuild` si vous souhaitez également recompiler `webots_ros2_driver`).*
+
+---
+
+## Crédits et remerciements
+
+Ce dépôt s'appuie sur le travail open source des projets et mainteneurs suivants :
+
+* **[idesign0/homebrew-ros2](https://github.com)** & **[idesign0/ros2_macOS](https://github.com)** (par **idesign0**) — Pour la compilation et la distribution des paquets natifs **ROS 2 Jazzy** sur macOS Apple Silicon, ainsi que les recommandations de configuration (profil Cyclone DDS sur `lo0` et contournement GraphicsMagick pour Nav2).
+* **[Cyberbotics Webots](https://github.com)** & **[webots_ros2](https://github.com_ros2)** — Pour le simulateur open source Webots, le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`) et le pont ROS 2 `webots_ros2_driver`.
+* **[DLu/tf_transformations](https://github.com)** (par **David V. Lu!!**, basé sur les travaux de Christoph Gohlke et Matthew Brett) — Pour la bibliothèque de transformations spatiales sous ROS 2.
+* **[Homebrew](https://brew.sh)** et la **Python Software Foundation** — Pour le gestionnaire de paquets macOS et la distribution framework de Python 3.11.
