@@ -1,3 +1,5 @@
+[English](./INSTALL_ROS2_JAZZY.en.md) | **[Français](./INSTALL_ROS2_JAZZY.md)**
+
 # Installation native de ROS 2 Jazzy sur macOS (Apple Silicon)
 
 Ce guide permet d'installer **ROS 2 Jazzy** en natif sur macOS Apple Silicon (`arm64`) avec **RViz2**, **Nav2**, **MoveIt 2** et **Gazebo Harmonic** inclus, sans machine virtuelle ni Docker.

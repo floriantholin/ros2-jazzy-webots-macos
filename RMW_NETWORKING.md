@@ -1,3 +1,5 @@
+[English](./RMW_NETWORKING.en.md) | **[Français](./RMW_NETWORKING.md)**
+
 # Guide des Middlewares ROS 2 (RMW) : macOS, Simulation & Robot réel (Raspberry Pi)
 
 Dans **ROS 2 Jazzy**, la communication entre les nœuds repose sur une couche d'abstraction appelée **RMW** (*ROS Middleware*). Le choix et la configuration du RMW déterminent la stabilité de la simulation sur macOS (Webots, RViz2, Nav2) ainsi que la fiabilité de la liaison Wi-Fi avec la voiture réelle (Raspberry Pi sous Ubuntu Server).

@@ -1,3 +1,5 @@
+[English](./INSTALL_WEBOTS_MACOS.en.md) | **[Français](./INSTALL_WEBOTS_MACOS.md)**
+
 # Installation de Webots en natif pour ROS 2 Jazzy sur macOS (Apple Silicon / macOS 27.2)
 
 Ce guide permet de compiler et configurer **Webots** ainsi que **`webots_ros2_driver`** en natif sur macOS lorsque ROS 2 Jazzy est installé via Homebrew (`idesign0/homebrew-ros2`).
