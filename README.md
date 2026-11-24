@@ -62,6 +62,7 @@ brew upgrade ros2-jazzy
 | **[`RMW_NETWORKING.md`](./RMW_NETWORKING.md)** | Guide des middlewares ROS 2 (CycloneDDS, FastDDS, Zenoh) pour macOS et Raspberry Pi. |
 | **`install_ros2_jazzy.sh`** | Script automatisé d'installation de ROS 2 Jazzy et de configuration de `~/.zshrc`. |
 | **`install_webots_ros2.sh`** | Script automatisé de compilation de Webots et de `webots_ros2_driver` (avec signature `codesign` automatique). |
+| **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** | Optionnel : chargement à la demande (`ros2_on` / `ros2_off` / `ros2_toggle`) + badge Powerlevel10k pour garder des terminaux rapides. |
 | **`fix_ros2_macos.sh`** | Script de maintenance rapide à lancer après chaque mise à jour (`brew upgrade ros2-jazzy`). |
 | **`uninstall_webots_ros2.sh`** | Script de désinstallation propre de Webots et de `webots_ros2_driver`. |
 | **`uninstall_ros2_jazzy.sh`** | Script de désinstallation complète de ROS 2 Jazzy et de Python 3.11 (`python.org`). |
@@ -100,7 +101,7 @@ source ~/.zshrc
 ```
 
 > 💡 **Astuce performance (ouverture rapide des terminaux) :**
-> Charger ROS 2 (`source setup.zsh`) ralentit sensiblement l'ouverture de chaque nouveau terminal ou onglet. Pour éviter cela au quotidien, vous pouvez encapsuler le bloc ROS 2 de votre `~/.zshrc` dans une fonction **`ros2_on()`** (activée uniquement à la demande et mémorisée via un fichier témoin `~/.ros2_enabled` pour les nouveaux terminaux) et une fonction **`ros2_off()`** (qui exécute `ros2 daemon stop` puis `exec env -i zsh -l` pour purger complètement l'environnement).
+> Charger ROS 2 (`source setup.zsh`) ralentit sensiblement l'ouverture de chaque nouveau terminal ou onglet. Pour éviter cela au quotidien, vous pouvez encapsuler le bloc ROS 2 de votre `~/.zshrc` dans une fonction **`ros2_on()`** (activée uniquement à la demande et mémorisée via un fichier témoin `~/.ros2_enabled` pour les nouveaux terminaux) et une fonction **`ros2_off()`** (qui exécute `ros2 daemon stop` puis `exec env -i zsh -l` pour purger complètement l'environnement). Le fichier prêt à l'emploi est fourni dans **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** (remplacez simplement le bloc `# ROS 2 JAZZY` de `~/.zshrc` par son contenu).
 
 ---
 

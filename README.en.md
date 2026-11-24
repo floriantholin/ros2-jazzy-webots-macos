@@ -63,6 +63,7 @@ brew upgrade ros2-jazzy
 | **[`RMW_NETWORKING.md`](./RMW_NETWORKING.md)** | ROS 2 middleware guide (CycloneDDS, FastDDS, Zenoh) for macOS and Raspberry Pi setups. |
 | **`install_ros2_jazzy.sh`** | Automated installation script for ROS 2 Jazzy and `~/.zshrc` environment setup. |
 | **`install_webots_ros2.sh`** | Automated build script for Webots and `webots_ros2_driver` (with automatic `codesign`). |
+| **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** | Optional: on-demand environment toggle (`ros2_on` / `ros2_off` / `ros2_toggle`) + Powerlevel10k badge for instant terminal startup. |
 | **`fix_ros2_macos.sh`** | Quick maintenance script to run after `brew upgrade ros2-jazzy`. |
 | **`uninstall_webots_ros2.sh`** | Clean uninstaller for Webots and `webots_ros2_driver`. |
 | **`uninstall_ros2_jazzy.sh`** | Complete uninstaller for ROS 2 Jazzy and Python 3.11 (`python.org`). |
@@ -102,7 +103,7 @@ source ~/.zshrc
 ```
 
 > 💡 **Performance Tip (Fast Terminal Startup):**
-> Sourcing ROS 2 (`source setup.zsh`) noticeably slows down opening every new terminal window or tab. To avoid this in daily use, you can wrap the ROS 2 block in your `~/.zshrc` inside a **`ros2_on()`** function (enabled on demand and persisted across new terminals via a `~/.ros2_enabled` marker file) alongside a **`ros2_off()`** function (which runs `ros2 daemon stop` followed by `exec env -i zsh -l` to completely purge the environment).
+> Sourcing ROS 2 (`source setup.zsh`) noticeably slows down opening every new terminal window or tab. To avoid this in daily use, you can wrap the ROS 2 block in your `~/.zshrc` inside a **`ros2_on()`** function (enabled on demand and persisted across new terminals via a `~/.ros2_enabled` marker file) alongside a **`ros2_off()`** function (which runs `ros2 daemon stop` followed by `exec env -i zsh -l` to completely purge the environment). A ready-to-use configuration is available in **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** (simply replace the `# ROS 2 JAZZY` block in `~/.zshrc` with its contents).
 
 ---
 
