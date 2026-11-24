@@ -57,7 +57,7 @@ if [[ -f "$HOME/.zshrc" ]]; then
   awk '
     /# ==============================================================================/ {
       getline nextline
-      if (nextline ~ /ROS 2 JAZZY \(macOS Apple Silicon\)/) {
+      if (nextline ~ /ROS 2 JAZZY/) {
         getline # saute la ligne de fermeture ===
         skip=1
         next
@@ -67,7 +67,7 @@ if [[ -f "$HOME/.zshrc" ]]; then
         next
       }
     }
-    skip && /^$/ { skip=0; next }
+    skip && (/local_setup\.zsh/ || /END ROS2/) { skip=0; next }
     !skip { print }
   ' "$HOME/.zshrc.bak.ros2" > "$HOME/.zshrc"
   rm -f "$HOME/.zshrc.bak.ros2"
@@ -77,9 +77,8 @@ fi
 if [[ -f "$HOME/.zprofile" ]]; then
   cp "$HOME/.zprofile" "$HOME/.zprofile.bak.ros2"
   awk '
-    /# Setting PATH for Python 3\.11/ { skip=1; next }
-    skip && /Python\.framework\/Versions\/3\.11/ { next }
-    skip && /^export PATH=/ { skip=0; next }
+    /# Setting PATH for Python 3\.11/ { n=4 }
+    n > 0 { n--; next }
     { print }
   ' "$HOME/.zprofile.bak.ros2" > "$HOME/.zprofile"
   rm -f "$HOME/.zprofile.bak.ros2"
