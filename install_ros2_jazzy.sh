@@ -96,6 +96,7 @@ export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterfac
 
 # Chargement automatique du workspace s'il existe
 [[ -f "$ROS2_WS/install/local_setup.zsh" ]] && source "$ROS2_WS/install/local_setup.zsh"
+# ==================== END ROS2 ======================
 EOF
   echo "✅ Configuration ajoutée dans $ZSHRC."
 else

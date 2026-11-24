@@ -67,7 +67,7 @@ if [[ -f "$HOME/.zshrc" ]]; then
         next
       }
     }
-    skip && (/local_setup\.zsh/ || /END ROS2/) { skip=0; next }
+    skip && /END ROS2/ { skip=0; next }
     !skip { print }
   ' "$HOME/.zshrc.bak.ros2" > "$HOME/.zshrc"
   rm -f "$HOME/.zshrc.bak.ros2"

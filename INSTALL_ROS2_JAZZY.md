@@ -112,7 +112,8 @@ export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterfac
 # export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="en0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
 
 # Chargement automatique de votre workspace s'il existe
-[[ -f "$HOME/ros2_ws/install/local_setup.zsh" ]] && source "$HOME/ros2_ws/install/local_setup.zsh"
+[[ -f "\(HOME/ros2_ws/install/local_setup.zsh" ]] && source "\)HOME/ros2_ws/install/local_setup.zsh"
+# ==================== END ROS2 ======================
 ```
 
 Rechargez ensuite votre configuration :
