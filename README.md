@@ -97,6 +97,9 @@ Ajoutez ensuite les **3 lignes `WEBOTS_HOME` / `WEBOTS_TMPDIR`** affichées à l
 source ~/.zshrc
 ```
 
+> 💡 **Astuce performance (ouverture rapide des terminaux) :**
+> Charger ROS 2 (`source setup.zsh`) ralentit sensiblement l'ouverture de chaque nouveau terminal ou onglet. Pour éviter cela au quotidien, vous pouvez encapsuler le bloc ROS 2 de votre `~/.zshrc` dans une fonction **`ros2_on()`** (activée uniquement à la demande et mémorisée via un fichier témoin `~/.ros2_enabled` pour les nouveaux terminaux) et une fonction **`ros2_off()`** (qui exécute `ros2 daemon stop` puis `exec env -i zsh -l` pour purger complètement l'environnement).
+
 ---
 
 ## Désinstallation complète
