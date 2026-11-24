@@ -72,6 +72,7 @@ pip3.11 install transforms3d scipy "git+https://github.com/DLu/tf_transformation
 # 1. Ajouter et approuver le dépôt (tap) dédié
 brew tap idesign0/ros2
 brew trust idesign0/ros2
+brew trust osrf/simulation 2>/dev/null || true
 
 # 2. Installer la distribution complète (keg-only)
 brew install ros2-jazzy
@@ -112,7 +113,7 @@ export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterfac
 # export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="en0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
 
 # Chargement automatique de votre workspace s'il existe
-[[ -f "\(HOME/ros2_ws/install/local_setup.zsh" ]] && source "\)HOME/ros2_ws/install/local_setup.zsh"
+[[ -f "$HOME/ros2_ws/install/local_setup.zsh" ]] && source "$HOME/ros2_ws/install/local_setup.zsh"
 # ==================== END ROS2 ======================
 ```
 
