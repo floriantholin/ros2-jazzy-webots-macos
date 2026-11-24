@@ -57,6 +57,7 @@ brew upgrade ros2-jazzy
 | :--- | :--- |
 | **[`INSTALL_ROS2_JAZZY.md`](./INSTALL_ROS2_JAZZY.md)** | Guide détaillé pas à pas pour installer Python 3.11 et ROS 2 Jazzy via Homebrew. |
 | **[`INSTALL_WEBOTS_MACOS.md`](./INSTALL_WEBOTS_MACOS.md)** | Guide détaillé pour compiler Webots en natif (`arm64`) et patcher `webots_ros2_driver` pour macOS 27.2. |
+| **[`RMW_NETWORKING.md`](./RMW_NETWORKING.md)** | Guide des middlewares ROS 2 (CycloneDDS, FastDDS, Zenoh) pour macOS et Raspberry Pi. |
 | **`install_ros2_jazzy.sh`** | Script automatisé d'installation de ROS 2 Jazzy et de configuration de `~/.zshrc`. |
 | **`install_webots_ros2.sh`** | Script automatisé de compilation de Webots et de `webots_ros2_driver` (avec signature `codesign` automatique). |
 | **`fix_ros2_macos.sh`** | Script de maintenance rapide à lancer après chaque mise à jour (`brew upgrade ros2-jazzy`). |
