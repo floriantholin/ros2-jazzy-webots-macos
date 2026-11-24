@@ -101,9 +101,15 @@ export DYLD_LIBRARY_PATH="$(brew --prefix graphicsmagick)/lib:$DYLD_LIBRARY_PATH
 autoload -U bashcompinit && bashcompinit
 eval "$(register-python-argcomplete colcon)"
 
-# Cyclone DDS sur loopback (lo0) : évite les blocages multicast Wi-Fi lors des gros lancements
+# Cyclone DDS : middleware le plus fiable pour les gros lancements (Nav2, MoveIt)
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# Mode A : Tous les nœuds tournent en local sur ce Mac (interface loopback lo0)
 export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="lo0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
+
+# Mode B : Communication avec d'autres machines/robots sur le réseau local
+# Remplacer lo0 par votre interface réseau (trouvée via : route get default | grep interface, en0 normalement)
+# export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="en0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
 
 # Chargement automatique de votre workspace s'il existe
 [[ -f "$HOME/ros2_ws/install/local_setup.zsh" ]] && source "$HOME/ros2_ws/install/local_setup.zsh"

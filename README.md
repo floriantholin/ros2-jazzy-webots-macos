@@ -42,6 +42,9 @@ Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` offici
 | **`install_ros2_jazzy.sh`** | Script automatisé d'installation de ROS 2 Jazzy et de configuration de `~/.zshrc`. |
 | **`install_webots_ros2.sh`** | Script automatisé de compilation de Webots et de `webots_ros2_driver` (avec signature `codesign` automatique). |
 | **`fix_ros2_macos.sh`** | Script de maintenance rapide à lancer après chaque mise à jour (`brew upgrade ros2-jazzy`). |
+| **`uninstall_webots_ros2.sh`** | Script de désinstallation propre de Webots et de `webots_ros2_driver`. |
+
+| **`uninstall_ros2_jazzy.sh`** | Script de désinstallation complète de ROS 2 Jazzy et de Python 3.11 (`python.org`). |
 
 ---
 
@@ -84,6 +87,22 @@ brew upgrade ros2-jazzy
 ./fix_ros2_macos.sh ~/ros2_ws
 ```
 *(Ajoutez `--rebuild` si vous souhaitez également recompiler `webots_ros2_driver`).*
+
+---
+
+## Désinstallation complète
+
+Pour supprimer proprement l'ensemble de l'environnement (exécutez les scripts dans cet ordre) :
+
+```bash
+chmod +x uninstall_webots_ros2.sh uninstall_ros2_jazzy.sh
+
+# 1. Désinstaller Webots en premier
+./uninstall_webots_ros2.sh ~/ros2_ws
+
+# 2. Désinstaller ROS 2 Jazzy et Python 3.11 en second (ajoutez --delete-ws pour effacer ~/ros2_ws)
+./uninstall_ros2_jazzy.sh ~/ros2_ws
+```
 
 ---
 
