@@ -27,7 +27,7 @@ Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` offici
 
 | Composant | Support / Version requise | Notes |
 | :--- | :--- | :--- |
-| **Processeur** | **Apple Silicon (`arm64`) uniquement** (M1, M2, M3, M4) | Les Mac Intel (`x86_64`) ne sont pas supportés par le tap `idesign0/ros2`. |
+| **Processeur** | **Apple Silicon (`arm64`) uniquement** (*testé sur M4*) | Les Mac Intel (`x86_64`) ne sont pas supportés par le tap `idesign0/ros2`. |
 | **Système d'exploitation** | **macOS 15 (Sequoia) à 27.2** *(testé sur 27.2)* | Inclut le correctif réseau TCP (`WbTcpServer.cpp`) et le contournement SIP (`@rpath` + `codesign`) pour macOS 27. |
 | **Python** | **Python 3.11.x officiel (`python.org`)** | Framework `/Library/Frameworks/Python.framework/Versions/3.11` obligatoire (Homebrew/uv non supportés). |
 | **ROS 2** | **Jazzy Jalisco** (`idesign0/homebrew-ros2`) | Keg-only via Homebrew, avec Cyclone DDS configuré sur `lo0`. |

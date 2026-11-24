@@ -27,7 +27,7 @@ Simply running `brew install ros2-jazzy` and downloading the official Webots `.d
 
 | Component | Supported / Required Version | Notes |
 | :--- | :--- | :--- |
-| **Processor** | **Apple Silicon (`arm64`) only** (M1, M2, M3, M4) | Intel Macs (`x86_64`) are not supported by the `idesign0/ros2` tap. |
+| **Processor** | **Apple Silicon (`arm64`) only** (*tested on M4*) | Intel Macs (`x86_64`) are not supported by the `idesign0/ros2` tap. |
 | **Operating System** | **macOS 15 (Sequoia) to 27.2** *(tested on 27.2)* | Includes the TCP networking fix (`WbTcpServer.cpp`) and SIP workaround (`@rpath` + `codesign`) for macOS 27. |
 | **Python** | **Official Python 3.11.x (`python.org`)** | `/Library/Frameworks/Python.framework/Versions/3.11` is required (Homebrew/uv Python builds are not supported). |
 | **ROS 2** | **Jazzy Jalisco** (`idesign0/homebrew-ros2`) | Keg-only via Homebrew, preconfigured with Cyclone DDS over `lo0`. |
