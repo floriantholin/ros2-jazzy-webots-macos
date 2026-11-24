@@ -41,7 +41,7 @@ Ce dépôt est conçu pour résister aux évolutions des trois composants dont i
 | Composant | Ce qui se passe lors d'une mise à jour | Comment le dépôt s'adapte |
 | :--- | :--- | :--- |
 | **`ros2-jazzy`** *(Homebrew)* | `brew upgrade ros2-jazzy` remplace le répertoire de ROS 2, ce qui supprime le lien symbolique `lib/Contents` et les signatures `@rpath` / `codesign` des bibliothèques `.dylib`. | Exécutez **`./fix_ros2_macos.sh ~/ros2_ws`** pour restaurer immédiatement le lien et re-signer les bibliothèques en quelques secondes.<br>*(Ajoutez `--rebuild` en cas de mise à jour majeure des bibliothèques C++ pour recompiler le bridge).* |
-| **`webots_ros2_driver`** *(Bridge ROS 2)* | Le code amont évolue pour les nouvelles versions de ROS 2 ou peut intégrer officiellement les correctifs macOS. | **1. Branche figée (`-b jazzy`) :** ignore la branche de développement `master`/`rolling` pour rester 100 % compatible avec l'API Jazzy.<br>**2. Python flexible :** adapte automatiquement toute version `Python 3.x` demandée par CMake vers `3.11`.<br>**3. Patch défensif (`Driver.cpp`) :** s'ignore proprement sans erreur si Cyberbotics supprime la lecture de `/proc/` sur macOS. |
+| **`webots_ros2_driver`** *(Bridge ROS 2)* | Le code amont évolue pour les nouvelles versions de ROS 2 ou peut intégrer officiellement les correctifs macOS. | **1. Branche amont (`master`) :** ignore la branche de développement `master`/`rolling` pour rester 100 % compatible avec l'API Jazzy.<br>**2. Python flexible :** adapte automatiquement toute version `Python 3.x` demandée par CMake vers `3.11`.<br>**3. Patch défensif (`Driver.cpp`) :** s'ignore proprement sans erreur si Cyberbotics supprime la lecture de `/proc/` sur macOS. |
 | **`Webots`** *(Simulateur)* | La branche `master` reçoit des mises à jour continues et intègre le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`). | `install_webots_ros2.sh` compile la dernière version de `master` en **`arm64` natif** et génère les scripts relais attendus par ROS 2.<br>*(Si `master` présente un jour une régression macOS, il suffit de basculer sur un tag de release officielle intégrant le correctif TCP).* |
 
 ### Commandes de maintenance après un `brew upgrade`
@@ -74,7 +74,7 @@ brew upgrade ros2-jazzy
 1. **Mac Apple Silicon (`arm64`)** sous macOS.
 2. **Xcode Command Line Tools :** `xcode-select --install`
 3. **Homebrew** installé dans `/opt/homebrew`.
-4. **Python 3.11 officiel** installé depuis [python.org](https://python.org) (installeur *macOS 64-bit universal2 .pkg*, suivi de `Install Certificates.command`).
+4. **Python 3.11.9 officiel** (dernière version 3.11 avec installeur macOS) téléchargé depuis [python.org/downloads/release/python-3119](https://www.python.org/downloads/release/python-3119/) (*macOS 64-bit universal2 installer* `.pkg`). À la fin de l'installation, **double-cliquez sur `Install Certificates.command`** dans la fenêtre Finder qui s'ouvre automatiquement.
 
 ### 1. Rendre les scripts exécutables
 ```bash
@@ -94,7 +94,7 @@ source ~/.zshrc
 ```bash
 ./install_webots_ros2.sh ~/ros2_ws --clean
 ```
-Ajoutez ensuite les **3 lignes `WEBOTS_HOME` / `WEBOTS_TMPDIR`** affichées à la fin du script dans votre `~/.zshrc`, puis rechargez votre terminal :
+Rechargez ensuite votre terminal pour charger `WEBOTS_HOME` et `WEBOTS_TMPDIR` (ajoutés automatiquement dans `~/.zshrc`) :
 ```bash
 source ~/.zshrc
 ```

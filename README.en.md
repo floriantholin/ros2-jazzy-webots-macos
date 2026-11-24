@@ -42,7 +42,7 @@ This repository is engineered to survive upstream updates across all three core 
 | Component | What Happens During an Update | How This Repository Adapts |
 | :--- | :--- | :--- |
 | **`ros2-jazzy`** *(Homebrew)* | `brew upgrade ros2-jazzy` replaces the ROS 2 cellar directory, wiping the `lib/Contents` symlink as well as `@rpath` / `codesign` signatures on `.dylib` files. | Run **`./fix_ros2_macos.sh ~/ros2_ws`** to restore the symlink and re-sign all libraries in seconds.<br>*(Pass `--rebuild` after major C++ library updates to recompile the bridge).* |
-| **`webots_ros2_driver`** *(ROS 2 Bridge)* | Upstream evolves for newer ROS 2 distributions or may eventually merge official macOS fixes. | **1. Pinned branch (`-b jazzy`):** ignores `master`/`rolling` to stay 100% compatible with the Jazzy API.<br>**2. Flexible Python detection:** automatically adapts any `Python 3.x` version requested by CMake to `3.11`.<br>**3. Defensive patch (`Driver.cpp`):** cleanly skips itself if Cyberbotics removes `/proc/` reads on macOS upstream. |
+| **`webots_ros2_driver`** *(ROS 2 Bridge)* | Upstream evolves for newer ROS 2 distributions or may eventually merge official macOS fixes. | **1. Upstream branch (`master`):** ignores `master`/`rolling` to stay 100% compatible with the Jazzy API.<br>**2. Flexible Python detection:** automatically adapts any `Python 3.x` version requested by CMake to `3.11`.<br>**3. Defensive patch (`Driver.cpp`):** cleanly skips itself if Cyberbotics removes `/proc/` reads on macOS upstream. |
 | **`Webots`** *(Simulator)* | The `master` branch receives continuous updates and includes the macOS 27 TCP networking fix (`WbTcpServer.cpp`). | `install_webots_ros2.sh` builds the latest `master` commit in **native `arm64`** and generates the wrapper scripts expected by ROS 2.<br>*(If `master` ever introduces a macOS regression, simply check out a release tag that includes the TCP fix).* |
 
 ### Maintenance Commands After `brew upgrade`
@@ -75,7 +75,7 @@ brew upgrade ros2-jazzy
 1. **Apple Silicon Mac (`arm64`)** running macOS.
 2. **Xcode Command Line Tools:** `xcode-select --install`
 3. **Homebrew** installed in `/opt/homebrew`.
-4. **Official Python 3.11** installed from [python.org](https://www.python.org) (*macOS 64-bit universal2 .pkg* installer, followed by `Install Certificates.command`).
+4. **Official Python 3.11.9** (the final 3.11 release with a macOS `.pkg` installer) downloaded from [python.org/downloads/release/python-3119](https://www.python.org/downloads/release/python-3119/) (*macOS 64-bit universal2 installer*). Once the installer finishes, **double-click `Install Certificates.command`** in the Finder window that opens automatically.
 
 ### 1. Make Scripts Executable
 ```bash
@@ -96,7 +96,7 @@ source ~/.zshrc
 ./install_webots_ros2.sh ~/ros2_ws --clean
 ```
 
-Add the **3 `WEBOTS_HOME` / `WEBOTS_TMPDIR` lines** printed at the end of the script to your `~/.zshrc`, then reload your shell:
+Then reload your shell to load `WEBOTS_HOME` and `WEBOTS_TMPDIR` (automatically added to `~/.zshrc`):
 ```bash
 source ~/.zshrc
 ```

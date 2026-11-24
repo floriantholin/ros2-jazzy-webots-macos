@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export GIT_TERMINAL_PROMPT=0
+export GIT_CONFIG_COUNT=1
+export GIT_CONFIG_KEY_0="credential.helper"
+export GIT_CONFIG_VALUE_0=""
+
 # ==============================================================================
 # Installation native de Webots + webots_ros2_driver pour ROS 2 Jazzy (macOS)
 # Usage : ./install_webots_ros2.sh [chemin_workspace_ros2] [--clean]
@@ -82,7 +87,7 @@ cd "$ROS2_WS/src"
 
 if [[ ! -d "$ROS2_WS/src/webots_ros2" ]]; then
   REPO_ROS2=$(echo "https://github-com/cyberbotics/webots_ros2-git" | tr '-' '.')
-  git clone -b jazzy --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
+  git clone --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
 else
   echo "ℹ️  Le dépôt $ROS2_WS/src/webots_ros2 existe déjà, clonage ignoré."
 fi
@@ -179,14 +184,23 @@ fi
 
 mkdir -p "/tmp/webots/$USER"
 
+ZSHRC="$HOME/.zshrc"
+touch "$ZSHRC"
+if ! grep -q "WEBOTS_HOME" "$ZSHRC"; then
+  cat << EOF >> "$ZSHRC"
+
+# Charge Webots (compilé) et aligne le dossier IPC avec ros2_supervisor
+export WEBOTS_HOME="$WEBOTS_DIR/Contents"
+mkdir -p "/tmp/webots/\$USER"
+export WEBOTS_TMPDIR="/tmp/webots/\$USER"
+EOF
+  echo "✅ Variables Webots ajoutées dans $ZSHRC."
+else
+  echo "ℹ️  Variables Webots déjà présentes dans $ZSHRC."
+fi
+
 echo ""
 echo "=============================================================================="
 echo "✅ Installation terminée avec succès !"
-echo "Ajoutez ces lignes à votre ~/.zshrc (après le source de ros2-jazzy et du workspace) :"
-echo ""
-echo "  export WEBOTS_HOME=\"$WEBOTS_DIR/Contents\""
-echo "  mkdir -p \"/tmp/webots/\$USER\""
-echo "  export WEBOTS_TMPDIR=\"/tmp/webots/\$USER\""
-echo ""
-echo "Puis rechargez votre terminal : source ~/.zshrc"
+echo "Rechargez votre terminal avec : source ~/.zshrc"
 echo "=============================================================================="

@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+export GIT_TERMINAL_PROMPT=0
+export GIT_CONFIG_COUNT=1
+export GIT_CONFIG_KEY_0="credential.helper"
+export GIT_CONFIG_VALUE_0=""
+
 # ==============================================================================
 # Installation native de ROS 2 Jazzy sur macOS Apple Silicon (arm64)
 # Usage : ./install_ros2_jazzy.sh [chemin_workspace_ros2]
@@ -27,7 +32,7 @@ fi
 
 if [[ ! -x "$PYTHON_BIN" ]]; then
   echo "❌ Python 3.11 officiel (python.org) introuvable à : $PYTHON_BIN"
-  echo "👉 Installez Python 3.11.x (macOS universal2 .pkg) puis relancez ce script."
+  echo "👉 Téléchargez Python 3.11.9 (macOS universal2 .pkg) sur https://www.python.org/downloads/release/python-3119/ puis relancez ce script."
   exit 1
 fi
 

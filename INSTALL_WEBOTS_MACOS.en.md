@@ -11,7 +11,7 @@ This guide explains how to compile and configure **Webots** and **`webots_ros2_d
 Before starting, make sure you have installed:
 1. **Xcode Command Line Tools:** `xcode-select --install`
 2. **Homebrew** (on Apple Silicon, installed in `/opt/homebrew`)
-3. **Official Python 3.11** (from `python.org`, installed in `/Library/Frameworks/Python.framework/Versions/3.11`)
+3. **Official Python 3.11.9** (downloaded from [python.org/downloads/release/python-3119](https://www.python.org/downloads/release/python-3119/), followed by double-clicking `Install Certificates.command` in Finder)
 4. **ROS 2 Jazzy** via Homebrew: `brew install ros2-jazzy`
 
 ---
@@ -64,7 +64,7 @@ chmod +x ~/webots/Contents/webots ~/webots/Contents/webots-controller
 ```bash
 mkdir -p ~/ros2_ws/src && cd ~/ros2_ws/src
 REPO_ROS2=\$(echo "https://github-com/cyberbotics/webots_ros2-git" | tr '-' '.')
-git clone -b jazzy --depth 1 --recurse-submodules -j8 "\$REPO_ROS2"
+git clone --depth 1 --recurse-submodules -j8 "\$REPO_ROS2"
 
 # Ignore unused sub-packages during a workspace-wide colcon build
 for d in ~/ros2_ws/src/webots_ros2/*/; do

@@ -53,6 +53,7 @@ if [[ -d "/Library/Frameworks/Python.framework/Versions/3.11" || -d "/Applicatio
   for receipt in $(pkgutil --pkgs | grep -i 'org\.python\.Python.*3\.11' || true); do
     sudo pkgutil --forget "$receipt" >/dev/null
   done
+  rm -rf "$HOME/Library/Python/3.11"
   echo "✅ Python 3.11 et ses paquets pip3.11 supprimés."
 fi
 
