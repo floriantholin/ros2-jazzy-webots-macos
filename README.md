@@ -29,7 +29,25 @@ Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` offici
 | **Système d'exploitation** | **macOS 15 (Sequoia) à 27.2** *(testé sur 27.2)* | Inclut le correctif réseau TCP (`WbTcpServer.cpp`) et le contournement SIP (`@rpath` + `codesign`) pour macOS 27. |
 | **Python** | **Python 3.11.x officiel (`python.org`)** | Framework `/Library/Frameworks/Python.framework/Versions/3.11` obligatoire (Homebrew/uv non supportés). |
 | **ROS 2** | **Jazzy Jalisco** (`idesign0/homebrew-ros2`) | Keg-only via Homebrew, avec Cyclone DDS configuré sur `lo0`. |
-| **Webots** | **Compilé depuis `master` (R2025b+)** | Génère `webots` et `webots-controller` en `arm64` natif. |
+| **Webots** | **Compilé depuis `master` (R2025a+)** | Génère `webots` et `webots-controller` en `arm64` natif. |
+
+
+## Gestion des mises à jour et pérennité
+
+Ce dépôt est conçu pour résister aux évolutions des trois composants dont il dépend (validé sur **`ros2-jazzy 26.11.23.13`**, **Webots `R2025a`** et **`webots_ros2` `2025.0.1`**) :
+
+| Composant | Ce qui se passe lors d'une mise à jour | Comment le dépôt s'adapte |
+| :--- | :--- | :--- |
+| **`ros2-jazzy`** *(Homebrew)* | `brew upgrade ros2-jazzy` remplace le répertoire de ROS 2, ce qui supprime le lien symbolique `lib/Contents` et les signatures `@rpath` / `codesign` des bibliothèques `.dylib`. | Exécutez **`./fix_ros2_macos.sh ~/ros2_ws`** pour restaurer immédiatement le lien et re-signer les bibliothèques en quelques secondes.<br>*(Ajoutez `--rebuild` en cas de mise à jour majeure des bibliothèques C++ pour recompiler le bridge).* |
+| **`webots_ros2_driver`** *(Bridge ROS 2)* | Le code amont évolue pour les nouvelles versions de ROS 2 ou peut intégrer officiellement les correctifs macOS. | **1. Branche figée (`-b jazzy`) :** ignore la branche de développement `master`/`rolling` pour rester 100 % compatible avec l'API Jazzy.<br>**2. Python flexible :** adapte automatiquement toute version `Python 3.x` demandée par CMake vers `3.11`.<br>**3. Patch défensif (`Driver.cpp`) :** s'ignore proprement sans erreur si Cyberbotics supprime la lecture de `/proc/` sur macOS. |
+| **`Webots`** *(Simulateur)* | La branche `master` reçoit des mises à jour continues et intègre le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`). | `install_webots_ros2.sh` compile la dernière version de `master` en **`arm64` natif** et génère les scripts relais attendus par ROS 2.<br>*(Si `master` présente un jour une régression macOS, il suffit de basculer sur un tag de release officielle intégrant le correctif TCP).* |
+
+### Commandes de maintenance après un `brew upgrade`
+```bash
+brew upgrade ros2-jazzy
+./fix_ros2_macos.sh ~/ros2_ws            # Mise à jour standard (re-signature + lien symbolique)
+./fix_ros2_macos.sh ~/ros2_ws --rebuild  # Mise à jour majeure (recompile aussi webots_ros2_driver)
+```
 
 ---
 
@@ -67,7 +85,9 @@ source ~/.zshrc
 ```
 
 ### 3. Installer Webots et `webots_ros2_driver`
-*(Ajoutez l'option `--clean` pour supprimer automatiquement les fichiers intermédiaires de compilation à la fin).*
+
+> ⏳ **Temps d'exécution :** le clonage et la compilation native de Webots prennent environ **10 à 20 minutes** selon votre puce Apple Silicon (M1 à M4) et sollicitent tous les cœurs CPU. *(Ajoutez `--clean` pour libérer l'espace disque des fichiers temporaires à la fin).*
+
 ```bash
 ./install_webots_ros2.sh ~/ros2_ws --clean
 ```
@@ -75,17 +95,6 @@ Ajoutez ensuite les **3 lignes `WEBOTS_HOME` / `WEBOTS_TMPDIR`** affichées à l
 ```bash
 source ~/.zshrc
 ```
-
----
-
-## Maintenance après mise à jour Homebrew
-
-Lorsqu'une nouvelle version de `ros2-jazzy` est publiée sur Homebrew :
-```bash
-brew upgrade ros2-jazzy
-./fix_ros2_macos.sh ~/ros2_ws
-```
-*(Ajoutez `--rebuild` si vous souhaitez également recompiler `webots_ros2_driver`).*
 
 ---
 

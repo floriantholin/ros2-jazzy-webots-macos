@@ -58,7 +58,7 @@ else
   echo "ℹ️  Le dossier $WEBOTS_DIR existe déjà, clonage ignoré."
 fi
 
-echo "=== 2. Compilation de Webots en natif ==="
+echo "=== 2. Compilation de Webots en natif (compter 10 à 20 min selon votre Mac) ==="
 cd "$WEBOTS_DIR"
 export WEBOTS_HOME="$WEBOTS_DIR"
 # shellcheck disable=SC1091
@@ -76,7 +76,7 @@ cd "$ROS2_WS/src"
 
 if [[ ! -d "$ROS2_WS/src/webots_ros2" ]]; then
   REPO_ROS2=$(echo "https://github-com/cyberbotics/webots_ros2-git" | tr '-' '.')
-  git clone --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
+  git clone -b jazzy --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
 else
   echo "ℹ️  Le dépôt $ROS2_WS/src/webots_ros2 existe déjà, clonage ignoré."
 fi
@@ -89,21 +89,23 @@ for d in "$ROS2_WS/src/webots_ros2"/*/; do
 done
 
 # 1. Adapter la version Python exigée par CMake (3.12 -> 3.11)
-sed -i '' 's/find_package(Python 3.12 EXACT/find_package(Python 3.11 EXACT/g' "$DRIVER_DIR/CMakeLists.txt"
+sed -E -i '' 's/find_package\(Python 3\.[0-9]+ EXACT/find_package(Python 3.11 EXACT/g' "$DRIVER_DIR/CMakeLists.txt"
 
 # 2. Désactiver la lecture de /proc/<pid>/cmdline sur macOS dans Driver.cpp
 "$PYTHON_BIN" -c "
 p = '$DRIVER_DIR/src/Driver.cpp'
 txt = open(p).read()
-if '#ifndef __APPLE__' not in txt:
+if '/proc/' in txt and '#ifndef __APPLE__' not in txt:
     start = '  // The parent process must be ros2 run.'
     end = '                                    \"Please use the new WebotsController node instead.\\\\033[0m\");'
-    assert start in txt and end in txt, 'Bloc cmdline introuvable dans Driver.cpp'
-    txt = txt.replace(start, '#ifndef __APPLE__\n' + start, 1).replace(end, end + '\n#endif', 1)
-    open(p, 'w').write(txt)
-    print('✅ Patch Driver.cpp appliqué.')
+    if start in txt and end in txt:
+        txt = txt.replace(start, '#ifndef __APPLE__\n' + start, 1).replace(end, end + '\n#endif', 1)
+        open(p, 'w').write(txt)
+        print('✅ Patch Driver.cpp appliqué.')
+    else:
+        print('⚠️  Driver.cpp a évolué : vérifiez /proc/ sur macOS.')
 else:
-    print('ℹ️  Patch Driver.cpp déjà présent.')
+    print('ℹ️  Driver.cpp déjà compatible macOS, patch ignoré.')
 "
 
 # 3. Créer le script CMake de post-installation (rpath + codesign automatiques)

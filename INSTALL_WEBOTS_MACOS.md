@@ -38,6 +38,8 @@ git clone --depth 1 --recurse-submodules -j8 "$REPO_WEBOTS" ~/webots
 ```
 
 ### B. Compilation et création des scripts relais pour ROS 2
+
+> ⏳ **Durée estimée :** comptez **10 à 20 minutes** pour la compilation complète de Webots.
 ```bash
 cd ~/webots
 export WEBOTS_HOME="$HOME/webots"
@@ -60,7 +62,7 @@ chmod +x ~/webots/Contents/webots ~/webots/Contents/webots-controller
 ```bash
 mkdir -p ~/ros2_ws/src && cd ~/ros2_ws/src
 REPO_ROS2=$(echo "https://github-com/cyberbotics/webots_ros2-git" | tr '-' '.')
-git clone --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
+git clone -b jazzy --depth 1 --recurse-submodules -j8 "$REPO_ROS2"
 
 # Ignorer les sous-packages inutiles lors d'un colcon build global
 for d in ~/ros2_ws/src/webots_ros2/*/; do
@@ -68,7 +70,7 @@ for d in ~/ros2_ws/src/webots_ros2/*/; do
 done
 
 # 1. Adapter la version Python exigée par CMake (3.12 -> 3.11)
-sed -i '' 's/find_package(Python 3.12 EXACT/find_package(Python 3.11 EXACT/g' ~/ros2_ws/src/webots_ros2/webots_ros2_driver/CMakeLists.txt
+sed -E -i '' 's/find_package\(Python 3\.[0-9]+ EXACT/find_package(Python 3.11 EXACT/g' ~/ros2_ws/src/webots_ros2/webots_ros2_driver/CMakeLists.txt
 
 # 2. Désactiver la lecture de /proc/<pid>/cmdline sur macOS dans Driver.cpp
 python3.11 -c '
