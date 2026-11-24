@@ -184,7 +184,7 @@ env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH ros2 --help > /dev/null &
 ## 6. Maintenance (en cas de mise à jour)
 
 * **Après un `brew upgrade ros2-jazzy` :** réexécutez l'étape **3.B** (lien symbolique `lib/Contents` + boucle `install_name_tool` et `codesign` sur `$ROS2_PREFIX/lib`).
-* **Si une ancienne instance de Webots bloque un port TCP :** fermez les processus résiduels avec `pkill -9 -f webots`.
+* **Si une ancienne instance de Webots bloque un port TCP :** fermez les processus résiduels avec `pkill -9 -f '/Contents/MacOS/webots'`.
 
 ---
 
