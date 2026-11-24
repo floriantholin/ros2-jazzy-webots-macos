@@ -2,6 +2,7 @@
 # ROS 2 JAZZY (Mode activable/désactivable + Badge Powerlevel10k / Zsh standard)
 # Usage : source /chemin/vers/ros2_env_toggle.zsh (remplace le bloc ROS 2 standard)
 # Commandes : ros2_on | ros2_off | ros2_toggle
+# Indicateur visuel : affiche automatiquement un badge « 🤖 ROS2 (jazzy) » à droite du prompt quand actif (Powerlevel10k ou Zsh standard).
 # ==============================================================================
 
 _load_ros2_env() {
