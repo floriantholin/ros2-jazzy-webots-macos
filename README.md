@@ -34,7 +34,7 @@ Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` offici
 
 ## Gestion des mises à jour et pérennité
 
-Ce dépôt est conçu pour résister aux évolutions des trois composants dont il dépend (validé sur **`ros2-jazzy 26.11.23.13`**, **Webots `R2025a`** et **`webots_ros2` `2025.0.1`**) :
+Ce dépôt est conçu pour résister aux évolutions des trois composants dont il dépend (testé en **novembre 2026** sur **`macOS 27.2`**, **`ros2-jazzy 26.11.23.13`**, **Webots `R2025a`** et **`webots_ros2` `2025.0.1`**) :
 
 | Composant | Ce qui se passe lors d'une mise à jour | Comment le dépôt s'adapte |
 | :--- | :--- | :--- |
@@ -123,3 +123,4 @@ Ce dépôt s'appuie sur le travail open source des projets et mainteneurs suivan
 * **[Cyberbotics Webots](https://github.com/cyberbotics/webots)** & **[webots_ros2](https://github.com/cyberbotics/webots_ros2)** — Pour le simulateur open source Webots, le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`) et le pont ROS 2 `webots_ros2_driver`.
 * **[DLu/tf_transformations](https://github.com/DLu/tf_transformations)** (par **David V. Lu!!**, basé sur les travaux de Christoph Gohlke et Matthew Brett) — Pour la bibliothèque de transformations spatiales sous ROS 2.
 * **[Homebrew](https://brew.sh)** et la **Python Software Foundation** — Pour le gestionnaire de paquets macOS et la distribution framework de Python 3.11.
+* **[Google Gemini](https://google.com)** — Assistance au diagnostic des blocages macOS 27 (SIP/rpath, `/proc`, réseau DDS/Zenoh), ainsi qu'à la structuration des scripts et de la documentation.
