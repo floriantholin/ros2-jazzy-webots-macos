@@ -19,8 +19,8 @@ for arg in "$@"; do
 done
 
 echo "=== 0. Vérification des prérequis ==="
-if [[ "$(uname -s)" != "Darwin" ]]; then
-  echo "❌ Ce script est conçu uniquement pour macOS."
+if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
+  echo "❌ Ce script nécessite un Mac Apple Silicon (arm64)."
   exit 1
 fi
 
@@ -44,6 +44,10 @@ if ! brew list ros2-jazzy &>/dev/null; then
   exit 1
 fi
 
+if [[ -d "/Applications/Webots.app" ]]; then
+  echo "⚠️  /Applications/Webots.app détecté : assurez-vous d'utiliser $WEBOTS_DIR/Contents (via WEBOTS_HOME) et non la version .dmg."
+fi
+
 ROS2_PREFIX="$(brew --prefix ros2-jazzy)"
 export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"
 
@@ -61,8 +65,10 @@ fi
 echo "=== 2. Compilation de Webots en natif (compter 10 à 20 min selon votre Mac) ==="
 cd "$WEBOTS_DIR"
 export WEBOTS_HOME="$WEBOTS_DIR"
+set +u
 # shellcheck disable=SC1091
 source scripts/install/bash_profile.mac
+set -u
 make -j"$(sysctl -n hw.ncpu)"
 
 # Création des scripts relais attendus par webots_ros2_driver
@@ -92,21 +98,24 @@ done
 sed -E -i '' 's/find_package\(Python 3\.[0-9]+ EXACT/find_package(Python 3.11 EXACT/g' "$DRIVER_DIR/CMakeLists.txt"
 
 # 2. Désactiver la lecture de /proc/<pid>/cmdline sur macOS dans Driver.cpp
-"$PYTHON_BIN" -c "
-p = '$DRIVER_DIR/src/Driver.cpp'
-txt = open(p).read()
+"$PYTHON_BIN" - "$DRIVER_DIR/src/Driver.cpp" << 'EOF'
+import sys
+from pathlib import Path
+
+p = Path(sys.argv[1])
+txt = p.read_text()
 if '/proc/' in txt and '#ifndef __APPLE__' not in txt:
     start = '  // The parent process must be ros2 run.'
-    end = '                                    \"Please use the new WebotsController node instead.\\\\033[0m\");'
+    end = r'                                    "Please use the new WebotsController node instead.\033[0m");'
     if start in txt and end in txt:
         txt = txt.replace(start, '#ifndef __APPLE__\n' + start, 1).replace(end, end + '\n#endif', 1)
-        open(p, 'w').write(txt)
+        p.write_text(txt)
         print('✅ Patch Driver.cpp appliqué.')
     else:
         print('⚠️  Driver.cpp a évolué : vérifiez /proc/ sur macOS.')
 else:
     print('ℹ️  Driver.cpp déjà compatible macOS, patch ignoré.')
-"
+EOF
 
 # 3. Créer le script CMake de post-installation (rpath + codesign automatiques)
 cat << 'EOF' > "$DRIVER_DIR/macos_post_install.cmake"
@@ -158,7 +167,8 @@ set -u
 
 cd "$ROS2_WS"
 export WEBOTS_HOME="$WEBOTS_DIR/Contents"
-colcon build --packages-select webots_ros2_driver
+colcon build --packages-select webots_ros2_driver \
+  --cmake-args -DPython_EXECUTABLE="$PYTHON_BIN" -DPython3_EXECUTABLE="$PYTHON_BIN"
 
 if [[ "$CLEAN_BUILD" == true ]]; then
   echo "=== 5. Nettoyage des fichiers intermédiaires de compilation ==="

@@ -14,13 +14,14 @@ pkill -9 -f '/Contents/MacOS/webots' 2>/dev/null || true
 rm -rf "/tmp/webots/$USER"
 rmdir "/tmp/webots" 2>/dev/null || true
 rm -f "$HOME/.wget-hsts"
+rm -rf "$HOME/Library/Application Support/Cyberbotics" "$HOME/Library/Caches/Cyberbotics"
+rm -f "$HOME/Library/Preferences"/com.cyberbotics.Webots*.plist
 
 echo "=== 2. Suppression de Webots ($WEBOTS_DIR) ==="
 if [[ -d "$WEBOTS_DIR" ]]; then
   rm -rf "$WEBOTS_DIR"
   echo "✅ $WEBOTS_DIR supprimé."
 fi
-[[ -d "/Applications/Webots.app" ]] && rm -rf "/Applications/Webots.app"
 
 echo "=== 3. Suppression de webots_ros2 dans le workspace ($ROS2_WS) ==="
 rm -rf "$ROS2_WS/src/webots_ros2"

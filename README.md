@@ -1,3 +1,5 @@
+[English](./README.en.md) | **[Français](./README.md)**
+
 # ROS 2 Jazzy & Webots en natif sur macOS (Apple Silicon — testé sur macOS 27.2)
 
 > **Plateforme :** Apple Silicon (`arm64`) · **OS :** macOS 15 – 27.2 (testé sur 27.2) · **ROS 2 :** Jazzy Jalisco · **Python :** 3.11 (`python.org`)

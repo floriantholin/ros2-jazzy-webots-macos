@@ -35,6 +35,9 @@ echo "=== 2. Dépendances Homebrew et paquets Python 3.11 ==="
 brew update
 brew install cmake ninja pkgconf graphicsmagick git
 
+CERT_SCRIPT="/Applications/Python 3.11/Install Certificates.command"
+[[ -f "$CERT_SCRIPT" ]] && "$CERT_SCRIPT" >/dev/null 2>&1 || true
+
 export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"
 "$PYTHON_BIN" -m pip install --upgrade pip
 "$PYTHON_BIN" -m pip install \
@@ -61,11 +64,12 @@ TF_REPO=$(echo "https://github-com/DLu/tf_transformations-git" | tr '-' '.')
 
 echo "=== 3. Installation de ROS 2 Jazzy via Homebrew ==="
 brew tap idesign0/ros2
-brew trust idesign0/ros2
+brew trust idesign0/ros2 2>/dev/null || true
 brew trust osrf/simulation 2>/dev/null || true
 brew install ros2-jazzy
 
 ROS2_PREFIX="$(brew --prefix ros2-jazzy)"
+GM_PREFIX="$(brew --prefix graphicsmagick)"
 mkdir -p "$ROS2_WS/src"
 
 echo "=== 4. Configuration de ~/.zshrc ==="
@@ -81,10 +85,10 @@ if ! grep -q "ROS 2 JAZZY (macOS Apple Silicon)" "$ZSHRC"; then
 export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:\$PATH"
 
 # Chargement de ROS 2 Jazzy (inclut Gazebo Harmonic et RViz2)
-source "\$(brew --prefix ros2-jazzy)/setup.zsh"
+source "$ROS2_PREFIX/setup.zsh"
 
 # Correctif GraphicsMagick pour la lecture des cartes .pgm dans Nav2
-export DYLD_LIBRARY_PATH="\$(brew --prefix graphicsmagick)/lib:\$DYLD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$GM_PREFIX/lib\${DYLD_LIBRARY_PATH:+:\$DYLD_LIBRARY_PATH}"
 
 # Autocomplétion de colcon
 autoload -U bashcompinit && bashcompinit

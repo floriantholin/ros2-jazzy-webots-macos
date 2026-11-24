@@ -39,6 +39,11 @@ if [[ -d "/Library/Frameworks/Python.framework/Versions/3.11" || -d "/Applicatio
   sudo rm -rf "/Applications/Python 3.11"
   sudo find /usr/local/bin -lname '/Library/Frameworks/Python.framework/Versions/3.11/*' -delete 2>/dev/null || true
 
+  # Supprimer le lien symbolique Current s'il est désormais brisé
+  if [[ -L "/Library/Frameworks/Python.framework/Versions/Current" && ! -e "/Library/Frameworks/Python.framework/Versions/Current" ]]; then
+    sudo rm -f "/Library/Frameworks/Python.framework/Versions/Current"
+  fi
+
   # Supprimer le dossier parent Python.framework s'il est désormais vide
   if [[ -d "/Library/Frameworks/Python.framework/Versions" ]] && [[ -z "$(ls -A /Library/Frameworks/Python.framework/Versions)" ]]; then
     sudo rm -rf "/Library/Frameworks/Python.framework"
@@ -55,20 +60,19 @@ echo "=== 3. Nettoyage des blocs de configuration dans ~/.zshrc et ~/.zprofile =
 if [[ -f "$HOME/.zshrc" ]] && grep -q "ROS 2 JAZZY" "$HOME/.zshrc" && grep -q "END ROS2" "$HOME/.zshrc"; then
   cp "$HOME/.zshrc" "$HOME/.zshrc.bak.ros2"
   awk '
-    /# ==============================================================================/ {
-      getline nextline
-      if (nextline ~ /ROS 2 JAZZY/) {
-        getline # saute la ligne de fermeture ===
-        skip=1
-        next
-      } else {
-        print $0
-        print nextline
-        next
-      }
+    /^# =+$/ {
+      if (has_prev) { print prev }
+      prev = $0; has_prev = 1; next
     }
-    skip && /END ROS2/ { skip=0; next }
+    has_prev && /ROS 2 JAZZY/ {
+      has_prev = 0; skip = 1; next
+    }
+    has_prev {
+      print prev; has_prev = 0
+    }
+    skip && /END ROS2/ { skip = 0; next }
     !skip { print }
+    END { if (has_prev) print prev }
   ' "$HOME/.zshrc.bak.ros2" > "$HOME/.zshrc"
   rm -f "$HOME/.zshrc.bak.ros2"
   echo "✅ Bloc ROS 2 retiré de ~/.zshrc."
@@ -88,6 +92,7 @@ if [[ -f "$HOME/.zprofile" ]]; then
 fi
 
 echo "=== 4. Suppression des caches et logs utilisateur ==="
+pkill -f '_ros2_daemon' 2>/dev/null || true
 rm -rf "$HOME/.ros" "$HOME/Library/Caches/pip" "$HOME/.gz" "$HOME/.sdformat"
 rm -f "$HOME/.ros2_enabled"
 

@@ -9,6 +9,7 @@ set -euo pipefail
 ROS2_WS="$HOME/ros2_ws"
 WEBOTS_DIR="$HOME/webots"
 REBUILD_DRIVER=false
+PYTHON_BIN="/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11"
 
 for arg in "$@"; do
   case "$arg" in
@@ -46,6 +47,10 @@ echo "✅ Bibliothèques ROS 2 patchées et re-signées."
 
 if [[ "$REBUILD_DRIVER" == true ]]; then
   echo "=== 4. Recompilation de webots_ros2_driver ==="
+  if [[ ! -x "$PYTHON_BIN" ]]; then
+    echo "❌ Python 3.11 officiel (python.org) introuvable à : $PYTHON_BIN"
+    exit 1
+  fi
   export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"
   export WEBOTS_HOME="$WEBOTS_DIR/Contents"
   set +u
@@ -53,7 +58,8 @@ if [[ "$REBUILD_DRIVER" == true ]]; then
   source "$ROS2_PREFIX/setup.sh"
   set -u
   cd "$ROS2_WS"
-  colcon build --packages-select webots_ros2_driver
+  colcon build --packages-select webots_ros2_driver --cmake-clean-cache \
+    --cmake-args -DPython_EXECUTABLE="$PYTHON_BIN" -DPython3_EXECUTABLE="$PYTHON_BIN"
 fi
 
 echo "=== 5. Vérification sans DYLD_LIBRARY_PATH (test SIP macOS) ==="
@@ -62,6 +68,13 @@ set +u
 # shellcheck disable=SC1091
 source "$ROS2_PREFIX/setup.sh"
 set -u
+
+if [[ -f "$ROS2_WS/install/local_setup.sh" ]]; then
+  set +u
+  # shellcheck disable=SC1091
+  source "$ROS2_WS/install/local_setup.sh"
+  set -u
+fi
 
 if env -u DYLD_LIBRARY_PATH -u DYLD_FALLBACK_LIBRARY_PATH "$ROS2_PREFIX/bin/ros2" --help >/dev/null 2>&1; then
   echo "✅ Tout est opérationnel !"
