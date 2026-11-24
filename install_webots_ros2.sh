@@ -180,6 +180,7 @@ if [[ "$CLEAN_BUILD" == true ]]; then
   rm -rf "$WEBOTS_DIR/.git"
   find "$WEBOTS_DIR/dependencies" -maxdepth 2 -type f \( -name "*.dmg" -o -name "*.zip" -o -name "*.tar.*" \) -delete 2>/dev/null || true
   find "$WEBOTS_DIR/src" "$WEBOTS_DIR/projects" -type d -name "build" -exec rm -rf {} + 2>/dev/null || true
+  rm -rf "$HOME/Qt"
 fi
 
 mkdir -p "/tmp/webots/$USER"
