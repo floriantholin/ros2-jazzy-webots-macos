@@ -23,22 +23,23 @@ _load_ros2_env() {
   autoload -U bashcompinit && bashcompinit
   eval "$(register-python-argcomplete colcon)"
 
-  # 4. Cyclone DDS : middleware recommandé sur macOS (boucle locale lo0)
+  # 4. Cyclone DDS : middleware recommandé sur macOS (boucle locale lo0, remplacer lo0 par en0 pour communiquer avec d'autres machines)
   #    ⚠️ Ne jamais combiner avec ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST ni ROS_LOCALHOST_ONLY
   export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
   export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="lo0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
 
-  # 5. Workspace & Webots (compilé en natif)
+  # 5 Workspace : source et se place à la racine si créé un nouveau terminal
   [[ "$PWD" == "$HOME" && -d "$ws_dir" ]] && cd "$ws_dir"
   [[ -f "$ws_dir/install/local_setup.zsh" ]] && source "$ws_dir/install/local_setup.zsh"
 
+  # 6 Webots (compilé en natif)
   if [[ -d "$webots_dir/Contents" ]]; then
     export WEBOTS_HOME="$webots_dir/Contents"
     mkdir -p "/tmp/webots/$USER"
     export WEBOTS_TMPDIR="/tmp/webots/$USER"
   fi
 
-  # 6. Alias pratiques
+  # 7. Alias pratiques
   alias colcon_build_symlink='colcon build --symlink-install'
   alias source_workspace="source \"$ws_dir/install/local_setup.zsh\""
 }
