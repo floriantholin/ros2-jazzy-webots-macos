@@ -52,7 +52,7 @@ if [[ -d "/Library/Frameworks/Python.framework/Versions/3.11" || -d "/Applicatio
 fi
 
 echo "=== 3. Nettoyage des blocs de configuration dans ~/.zshrc et ~/.zprofile ==="
-if [[ -f "$HOME/.zshrc" ]]; then
+if [[ -f "$HOME/.zshrc" ]] && grep -q "ROS 2 JAZZY" "$HOME/.zshrc" && grep -q "END ROS2" "$HOME/.zshrc"; then
   cp "$HOME/.zshrc" "$HOME/.zshrc.bak.ros2"
   awk '
     /# ==============================================================================/ {
@@ -72,6 +72,8 @@ if [[ -f "$HOME/.zshrc" ]]; then
   ' "$HOME/.zshrc.bak.ros2" > "$HOME/.zshrc"
   rm -f "$HOME/.zshrc.bak.ros2"
   echo "✅ Bloc ROS 2 retiré de ~/.zshrc."
+elif [[ -f "$HOME/.zshrc" ]] && grep -q "ROS 2 JAZZY" "$HOME/.zshrc"; then
+  echo "⚠️  Balise END ROS2 introuvable : retirez manuellement le bloc ROS 2 dans ~/.zshrc."
 fi
 
 if [[ -f "$HOME/.zprofile" ]]; then
