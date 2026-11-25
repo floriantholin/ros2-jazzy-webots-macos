@@ -72,7 +72,7 @@ chmod +x install_ros2_jazzy.sh install_webots_ros2.sh fix_ros2_macos.sh
 source ~/.zshrc
 ```
 
-This script is a wrapper for the Homebrew solution proposed by [idesign](https://github.com/idesign0/homebrew-ros2), who made this native installation on macOS possible. Their solution is missing the python modules required to run Gazebo, which are automatically installed by this script, notably : *transforms3d, scipy and "git+https://github.com/DLu/tf\_transformations.git"*.
+This script is a wrapper for the Homebrew solution proposed by [idesign](https://github.com/idesign0/ros2_macOS), who made this native installation on macOS possible. Their solution is missing the python modules required to run Gazebo, which are automatically installed by this script, notably : *transforms3d, scipy and "git+https://github.com/DLu/tf\_transformations.git"*.
 
 The following section covers the installation of the Webots simulator and its driver. For a Jazzy + Gazebo installation only, skip Part 3.
 
