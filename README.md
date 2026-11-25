@@ -9,6 +9,22 @@ Ce dépôt regroupe les **guides d'installation** et les **scripts d'automatisat
 
 ---
 
+## Contenu du dossier
+
+| Fichier | Rôle |
+| :--- | :--- |
+| **[`INSTALL_ROS2_JAZZY.md`](./INSTALL_ROS2_JAZZY.md)** | Guide détaillé pas à pas pour installer Python 3.11 et ROS 2 Jazzy via Homebrew. |
+| **[`INSTALL_WEBOTS_MACOS.md`](./INSTALL_WEBOTS_MACOS.md)** | Guide détaillé pour compiler Webots en natif (`arm64`) et patcher `webots_ros2_driver` pour macOS 27.2. |
+| **[`RMW_NETWORKING.md`](./RMW_NETWORKING.md)** | Guide des middlewares ROS 2 (CycloneDDS, FastDDS, Zenoh) pour macOS et Raspberry Pi. |
+| **`install_ros2_jazzy.sh`** | Script automatisé d'installation de ROS 2 Jazzy et de configuration de `~/.zshrc`. |
+| **`install_webots_ros2.sh`** | Script automatisé de compilation de Webots et de `webots_ros2_driver` (avec signature `codesign` automatique). |
+| **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** | Optionnel : chargement à la demande (`ros2_on` / `ros2_off` / `ros2_toggle`) + badge Powerlevel10k pour garder des terminaux rapides. Affiche automatiquement un badge `🤖 ROS2 (jazzy)` à droite du prompt quand il est actif (Powerlevel10k ou Zsh standard). |
+| **`fix_ros2_macos.sh`** | Script de maintenance rapide à lancer après chaque mise à jour (`brew upgrade ros2-jazzy`). |
+| **`uninstall_webots_ros2.sh`** | Script de désinstallation propre de Webots et de `webots_ros2_driver`. |
+| **`uninstall_ros2_jazzy.sh`** | Script de désinstallation complète de ROS 2 Jazzy et de Python 3.11 (`python.org`). |
+
+---
+
 ## Pourquoi ce dépôt ? (Les blocages de l'installation de base)
 
 Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` officiel de Webots sur un Mac Apple Silicon récent (macOS 27.2) entraîne une série d'erreurs bloquantes. Ce dépôt automatise tous les correctifs nécessaires :
@@ -33,43 +49,11 @@ Installer simplement `brew install ros2-jazzy` et télécharger le `.dmg` offici
 | **ROS 2** | **Jazzy Jalisco** (`idesign0/homebrew-ros2`) | Keg-only via Homebrew, avec Cyclone DDS configuré sur `lo0`. |
 | **Webots** | **Compilé depuis `master` (R2025a+)** | Génère `webots` et `webots-controller` en `arm64` natif. |
 
-
-## Gestion des mises à jour et pérennité
-
-Ce dépôt est conçu pour résister aux évolutions des trois composants dont il dépend (testé en **novembre 2026** sur **`macOS 27.2`**, **`ros2-jazzy 26.11.23.13`**, **Webots `R2025a`** et **`webots_ros2` `2025.0.1`**) :
-
-| Composant | Ce qui se passe lors d'une mise à jour | Comment le dépôt s'adapte |
-| :--- | :--- | :--- |
-| **`ros2-jazzy`** *(Homebrew)* | `brew upgrade ros2-jazzy` remplace le répertoire de ROS 2, ce qui supprime le lien symbolique `lib/Contents` et les signatures `@rpath` / `codesign` des bibliothèques `.dylib`. | Exécutez **`./fix_ros2_macos.sh ~/ros2_ws`** pour restaurer immédiatement le lien et re-signer les bibliothèques en quelques secondes.<br>*(Ajoutez `--rebuild` en cas de mise à jour majeure des bibliothèques C++ pour recompiler le bridge).* |
-| **`webots_ros2_driver`** *(Bridge ROS 2)* | Le code amont évolue pour les nouvelles versions de ROS 2 ou peut intégrer officiellement les correctifs macOS. | **1. Branche amont (`master`) :** ignore la branche de développement `master`/`rolling` pour rester 100 % compatible avec l'API Jazzy.<br>**2. Python flexible :** adapte automatiquement toute version `Python 3.x` demandée par CMake vers `3.11`.<br>**3. Patch défensif (`Driver.cpp`) :** s'ignore proprement sans erreur si Cyberbotics supprime la lecture de `/proc/` sur macOS. |
-| **`Webots`** *(Simulateur)* | La branche `master` reçoit des mises à jour continues et intègre le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`). | `install_webots_ros2.sh` compile la dernière version de `master` en **`arm64` natif** et génère les scripts relais attendus par ROS 2.<br>*(Si `master` présente un jour une régression macOS, il suffit de basculer sur un tag de release officielle intégrant le correctif TCP).* |
-
-### Commandes de maintenance après un `brew upgrade`
-```bash
-brew upgrade ros2-jazzy
-./fix_ros2_macos.sh ~/ros2_ws            # Mise à jour standard (re-signature + lien symbolique)
-./fix_ros2_macos.sh ~/ros2_ws --rebuild  # Mise à jour majeure (recompile aussi webots_ros2_driver)
-```
-
----
-
-## Contenu du dossier
-
-| Fichier | Rôle |
-| :--- | :--- |
-| **[`INSTALL_ROS2_JAZZY.md`](./INSTALL_ROS2_JAZZY.md)** | Guide détaillé pas à pas pour installer Python 3.11 et ROS 2 Jazzy via Homebrew. |
-| **[`INSTALL_WEBOTS_MACOS.md`](./INSTALL_WEBOTS_MACOS.md)** | Guide détaillé pour compiler Webots en natif (`arm64`) et patcher `webots_ros2_driver` pour macOS 27.2. |
-| **[`RMW_NETWORKING.md`](./RMW_NETWORKING.md)** | Guide des middlewares ROS 2 (CycloneDDS, FastDDS, Zenoh) pour macOS et Raspberry Pi. |
-| **`install_ros2_jazzy.sh`** | Script automatisé d'installation de ROS 2 Jazzy et de configuration de `~/.zshrc`. |
-| **`install_webots_ros2.sh`** | Script automatisé de compilation de Webots et de `webots_ros2_driver` (avec signature `codesign` automatique). |
-| **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** | Optionnel : chargement à la demande (`ros2_on` / `ros2_off` / `ros2_toggle`) + badge Powerlevel10k pour garder des terminaux rapides. Affiche automatiquement un badge `🤖 ROS2 (jazzy)` à droite du prompt quand il est actif (Powerlevel10k ou Zsh standard). |
-| **`fix_ros2_macos.sh`** | Script de maintenance rapide à lancer après chaque mise à jour (`brew upgrade ros2-jazzy`). |
-| **`uninstall_webots_ros2.sh`** | Script de désinstallation propre de Webots et de `webots_ros2_driver`. |
-| **`uninstall_ros2_jazzy.sh`** | Script de désinstallation complète de ROS 2 Jazzy et de Python 3.11 (`python.org`). |
-
 ---
 
 ## Démarrage rapide (Installation complète)
+
+L'installation a été automatisée par des scripts shell, vous pouvez la faire manuellement en suivant le guide `INSTALL_ROS2_JAZZY.md`, puis le guide pour le simulateur Webots (sauf si vous ne voulez que Jazzy + Gazebo).
 
 ### 0. Prérequis manuels
 1. **Mac Apple Silicon (`arm64`)** sous macOS.
@@ -87,6 +71,9 @@ chmod +x install_ros2_jazzy.sh install_webots_ros2.sh fix_ros2_macos.sh
 ./install_ros2_jazzy.sh ~/ros2_ws
 source ~/.zshrc
 ```
+Ce script est un wrapper de la solution Homebrew proposée par [idesign](https://github.com/idesign0/homebrew-ros2) qui a rendu possible cette installation native sur macOS. Il manque à sa solution des modules pythons nécessaires pour faire tourner Gazebo, qui sont installés automatiquement par ce script, notemment : *transforms3d, scipy et "git+https://github.com/DLu/tf_transformations.git"*.
+
+La suite concerne l'installation du simulateur Webots et son pilote. Pour une installation jazzy+Gazebo uniquement, sautez la partie 3.
 
 ### 3. Installer Webots et `webots_ros2_driver`
 
@@ -100,10 +87,13 @@ Rechargez ensuite votre terminal pour charger `WEBOTS_HOME` et `WEBOTS_TMPDIR` (
 source ~/.zshrc
 ```
 
-> 💡 **Astuce performance (ouverture rapide des terminaux & badge Powerlevel10k) :**
-> Charger ROS 2 (`source setup.zsh`) ralentit sensiblement l'ouverture de chaque nouveau terminal ou onglet. Pour éviter cela au quotidien, utilisez le fichier **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** (remplacez le bloc `# ROS 2 JAZZY` de votre `~/.zshrc` par son contenu) :
-> * **`ros2_on` / `ros2_off` / `ros2_toggle`** activent ou purgent complètement l'environnement ROS 2 à la demande (état mémorisé entre les terminaux via `~/.ros2_enabled`).
-> * **Indicateur visuel à droite du prompt :** tant que ROS 2 est actif, le script affiche automatiquement un badge bleu **`🤖 ROS2 (jazzy)`** tout à droite de la ligne de commande (compatible avec le thème de prompt **[Powerlevel10k](https://github.com)** s'il est installé, ou avec le prompt Zsh standard).
+### 4. Astuce : fonction d'activation/désactivation de ROS2
+
+Charger ROS 2 (`source setup.zsh`) ralentit sensiblement l'ouverture de chaque nouveau terminal ou onglet. Pour éviter cela au quotidien, utilisez le fichier **[`ros2_env_toggle.zsh`](./ros2_env_toggle.zsh)** (remplacez le bloc `# ROS 2 JAZZY` de votre `~/.zshrc` par son contenu) :
+* **`ros2_on` / `ros2_off` / `ros2_toggle`** activent ou purgent complètement l'environnement ROS 2 à la demande (état mémorisé entre les terminaux via `~/.ros2_enabled`).
+* **Indicateur visuel à droite du prompt :** tant que ROS 2 est actif, le script affiche automatiquement un badge bleu **`🤖 ROS2 (jazzy)`** tout à droite de la ligne de commande (compatible avec le thème de prompt **[Powerlevel10k](https://github.com)** s'il est installé, ou avec le prompt Zsh standard).
+
+Note : Si vous n'utilisez pas webots et avez copié `ros2_env_toggle.zsh` dans votre .bashrc, alors supprimez les lignes correspondantes.
 
 ---
 
@@ -120,6 +110,23 @@ chmod +x uninstall_webots_ros2.sh uninstall_ros2_jazzy.sh
 # 2. Désinstaller ROS 2 Jazzy et Python 3.11 en second (ajoutez --delete-ws pour effacer ~/ros2_ws)
 ./uninstall_ros2_jazzy.sh ~/ros2_ws
 ```
+
+### Commandes de maintenance après un `brew upgrade`
+```bash
+brew upgrade ros2-jazzy
+./fix_ros2_macos.sh ~/ros2_ws            # Mise à jour standard (re-signature + lien symbolique)
+./fix_ros2_macos.sh ~/ros2_ws --rebuild  # Mise à jour majeure (recompile aussi webots_ros2_driver)
+```
+
+## Gestion des mises à jour et pérennité
+
+Ce dépôt est conçu pour résister aux évolutions des trois composants dont il dépend (testé en **novembre 2026** sur **`macOS 27.2`**, **`ros2-jazzy 26.11.23.13`**, **Webots `R2025a`** et **`webots_ros2` `2025.0.1`**) :
+
+| Composant | Ce qui se passe lors d'une mise à jour | Comment le dépôt s'adapte |
+| :--- | :--- | :--- |
+| **`ros2-jazzy`** *(Homebrew)* | `brew upgrade ros2-jazzy` remplace le répertoire de ROS 2, ce qui supprime le lien symbolique `lib/Contents` et les signatures `@rpath` / `codesign` des bibliothèques `.dylib`. | Exécutez **`./fix_ros2_macos.sh ~/ros2_ws`** pour restaurer immédiatement le lien et re-signer les bibliothèques en quelques secondes.<br>*(Ajoutez `--rebuild` en cas de mise à jour majeure des bibliothèques C++ pour recompiler le bridge).* |
+| **`webots_ros2_driver`** *(Bridge ROS 2)* | Le code amont évolue pour les nouvelles versions de ROS 2 ou peut intégrer officiellement les correctifs macOS. | **1. Branche amont (`master`) :** ignore la branche de développement `master`/`rolling` pour rester 100 % compatible avec l'API Jazzy.<br>**2. Python flexible :** adapte automatiquement toute version `Python 3.x` demandée par CMake vers `3.11`.<br>**3. Patch défensif (`Driver.cpp`) :** s'ignore proprement sans erreur si Cyberbotics supprime la lecture de `/proc/` sur macOS. |
+| **`Webots`** *(Simulateur)* | La branche `master` reçoit des mises à jour continues et intègre le correctif réseau TCP pour macOS 27 (`WbTcpServer.cpp`). | `install_webots_ros2.sh` compile la dernière version de `master` en **`arm64` natif** et génère les scripts relais attendus par ROS 2.<br>*(Si `master` présente un jour une régression macOS, il suffit de basculer sur un tag de release officielle intégrant le correctif TCP).* |
 
 ---
 

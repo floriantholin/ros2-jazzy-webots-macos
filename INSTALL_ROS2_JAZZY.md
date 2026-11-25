@@ -62,7 +62,7 @@ pip3.11 install \
   typing_extensions \
   colcon-common-extensions
 
-# Dépendances mathématiques et transformations spatiales (TF2 / navigation)
+# Dépendances mathématiques et transformations spatiales (TF2 / navigation) nécessaires pour Gazebo
 pip3.11 install transforms3d scipy "git+https://github.com/DLu/tf_transformations.git"
 ```
 

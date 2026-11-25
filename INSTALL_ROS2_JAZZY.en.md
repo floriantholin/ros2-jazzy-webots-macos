@@ -62,7 +62,7 @@ pip3.11 install \
   typing_extensions \
   colcon-common-extensions
 
-# Math and spatial transformation libraries (TF2 / Navigation)
+# Math and spatial transformation libraries (TF2 / Navigation) needed for Gazebo
 pip3.11 install transforms3d scipy "git+https://github.com/DLu/tf_transformations.git"
 ```
 
