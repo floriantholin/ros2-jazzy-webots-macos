@@ -35,19 +35,18 @@ export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterfac
 ## 3. Configuration 2 : Liaison Mac ↔ Voiture (Raspberry Pi Ubuntu Server)
 
 ### Option A — Mode DDS standard (compatible avec toute l'équipe Ubuntu)
-CycloneDDS et FastDDS utilisent le même standard réseau DDS et communiquent nativement entre eux.
+CycloneDDS et FastDDS utilisent le même standard réseau DDS, mais la communication entre eux n'est pas garantie, à éviter.
 
 1. **Sur la Raspberry Pi (`~/.bashrc`) :**
-   Gardez FastDDS par défaut (ou installez CycloneDDS via `sudo apt install ros-jazzy-rmw-cyclonedds-cpp`) et vérifiez l'ID de domaine :
-   ```bash
-   export ROS_DOMAIN_ID=0
-   ```
+   Installez CycloneDDS via `sudo apt install ros-jazzy-rmw-cyclonedds-cpp`.
 2. **Sur le Mac (`~/.zshrc`) :**
    Basculez CycloneDDS de `lo0` vers votre carte Wi-Fi (généralement `en0`, vérifiable via `route get default | grep interface`) :
    ```zsh
    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
    export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="en0" multicast="true"/></Interfaces></General><Discovery><ParticipantIndex>none</ParticipantIndex></Discovery></Domain></CycloneDDS>'
    ```
+
+Rq : FastDDS marche aussi mais est souvent moins performant.
 
 ---
 
