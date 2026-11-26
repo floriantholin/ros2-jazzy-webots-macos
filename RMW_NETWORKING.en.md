@@ -38,7 +38,7 @@ export CYCLONEDDS_URI='<CycloneDDS><Domain><General><Interfaces><NetworkInterfac
 CycloneDDS and FastDDS use the same DDS network standard, but communication between them is not guaranteed and should be avoided.
 
 1. **On the Raspberry Pi (`~/.bashrc`):**
-   Keep FastDDS as default (or install CycloneDDS via `sudo apt install ros-jazzy-rmw-cyclonedds-cpp`).
+   Install CycloneDDS via `sudo apt install ros-jazzy-rmw-cyclonedds-cpp`.
 2. **On the Mac (`~/.zshrc`):**
    Switch CycloneDDS from `lo0` to your Wi-Fi interface (usually `en0`, verifiable via `route get default | grep interface`):
    ```zsh
