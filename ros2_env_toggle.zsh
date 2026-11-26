@@ -40,8 +40,9 @@ _load_ros2_env() {
   fi
 
   # 7. Alias pratiques
-  alias colcon_build_symlink='colcon build --symlink-install'
-  alias source_workspace="source \"$ws_dir/install/local_setup.zsh\""
+  alias src_workspace="source \"$ws_dir/install/local_setup.zsh\""
+  alias colcon_build="(cd \"$ws_dir\" && colcon build) && src_workspace"
+  alias colcon_build_symlink="(cd \"$ws_dir\" && colcon build --symlink-install) && src_workspace"
 }
 
 # Chargement automatique à l'ouverture d'un terminal si le mode ROS 2 est mémorisé
